@@ -3,23 +3,23 @@ import {ApiError} from "../utils/ApiError.js";
 import { User } from "../models/user.model.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 
-const generateAccessAndRefreshTokens = async(userId) => {
-    try{
+const generateAccessAndRefereshTokens = async(userId) =>{
+    try {
         const user = await User.findById(userId)
+
+
         const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
+        const refreshToken = user.generateRefereshToken()
 
-        user.refreshToken = refreshToken
-        await user.save({validateBeforeSave: false})
+        user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: false })
 
-        return {accessToken, refreshToken
+        return {accessToken, refreshToken}
 
 
-        }
-    } catch (error){
-        throw new ApiError(500, "Something went wrong while generating refresh and access token")
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while generating referesh and access token")
     }
 }
 
@@ -32,7 +32,7 @@ const registerUser = asyncHandler( async(req, res) => {
     // check for user creation
     // return response
 
-    const { fullName, email, username, password }= req.body
+    const { fullName, email, username, password } = req.body
 
     if(
         [fullName, email, username, password].some((field) => field?.trim() === "")
@@ -48,9 +48,12 @@ const registerUser = asyncHandler( async(req, res) => {
         throw new ApiError(409, "User with email or username already exsits")
     }
 
+    console.log(`body: `, req.body);
+
     const user = await User.create({
         fullName,
         email,
+        password,
         username: username.toLowerCase()
     })
 
@@ -76,7 +79,7 @@ const loginUser = asyncHandler( async (req, res) => {
         // access and refresh token
         // send cookie &response
 
-        const { email, username} = req.body
+        const { email, username, password } = req.body
 
         if(!username && !email){
             throw new ApiError(400, "username or email is required")
@@ -96,7 +99,7 @@ const loginUser = asyncHandler( async (req, res) => {
         throw new ApiError(401, "Invalid user credentials")
     }
 
-    const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id)
+    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
@@ -172,7 +175,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             secure: true
         }
 
-        const {accessToken, newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
+        const {accessToken, newRefreshToken} = await generateAccessAndRefereshTokens(user._id)
 
         return res
         .status(200)

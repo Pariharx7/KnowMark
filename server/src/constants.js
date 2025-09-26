@@ -1,1 +1,1 @@
-export const DB_NAME = "knowmark"
+export const DB_NAME = "KnowMark"

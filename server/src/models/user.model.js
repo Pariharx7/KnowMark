@@ -29,6 +29,9 @@ const userSchema = new Schema({
     profilePicture: {
     type: String, // Will store the image URL (if provided later)
     default: null  // No picture initially
+  },
+  refreshToken: {
+    type: String
   }
 },{
     timestamps: true
@@ -58,7 +61,7 @@ userSchema.methods.generateAccessToken = function(){
 )
 }
 
-userSchema.methods.generateRefreshToken = function() {
+userSchema.methods.generateRefereshToken = function() {
     return jwt.sign({
         _id: this._id,
     },
