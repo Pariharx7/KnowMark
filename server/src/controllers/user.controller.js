@@ -8,7 +8,6 @@ const generateAccessAndRefereshTokens = async(userId) =>{
     try {
         const user = await User.findById(userId)
 
-
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefereshToken()
 
@@ -80,7 +79,7 @@ const loginUser = asyncHandler( async (req, res) => {
         // send cookie &response
 
         const { email, username, password } = req.body
-
+        console.log(" Email is -> ",email);
         if(!username && !email){
             throw new ApiError(400, "username or email is required")
         }
