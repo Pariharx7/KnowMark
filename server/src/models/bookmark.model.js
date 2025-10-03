@@ -19,7 +19,8 @@ const bookmarkSchema = new Schema({
     tags: [{
         type: String,
         trim: true,
-        maxlength: true
+        lowercase: true,
+        maxlength: 30
     }],
     userId: {
         type: Schema.Types.ObjectId,
@@ -30,6 +31,7 @@ const bookmarkSchema = new Schema({
     timestamps: true
 })
 
+bookmarkSchema.index({userId: 1, url: 1}, { unique: true });
 bookmarkSchema.plugin(mongooseAggregatePaginate)
 
 export const Bookmark = mongoose.model("Bookmark", bookmarkSchema)
