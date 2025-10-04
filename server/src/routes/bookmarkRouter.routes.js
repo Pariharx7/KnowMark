@@ -4,7 +4,8 @@ import {
     getAllBookmarks,
     addABookmark,
     deleteABookmark,
-    updateABookmark
+    updateABookmark,
+    searchBookmarks
 } from "../controllers/bookmark.controller.js"
 
 const router = Router();
@@ -19,6 +20,8 @@ router
     .route("/:id")
     .delete(deleteABookmark)
     .put(updateABookmark)
+
+router.get("/search", searchBookmarks);
 
 
 export default router

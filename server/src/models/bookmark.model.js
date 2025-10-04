@@ -14,7 +14,8 @@ const bookmarkSchema = new Schema({
     },
     notes: {
         type: String,
-        trim: true
+        trim: true,
+        default: ""
     },
     tags: [{
         type: String,
@@ -33,5 +34,7 @@ const bookmarkSchema = new Schema({
 
 bookmarkSchema.index({userId: 1, url: 1}, { unique: true });
 bookmarkSchema.plugin(mongooseAggregatePaginate)
+
+bookmarkSchema.index({title: "text", notes: "text"});
 
 export const Bookmark = mongoose.model("Bookmark", bookmarkSchema)

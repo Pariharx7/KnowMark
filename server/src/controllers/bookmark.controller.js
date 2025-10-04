@@ -102,9 +102,35 @@ const updateABookmark = asyncHandler(async (req, res) => {
         );
 });
 
+const searchBookmarks = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const { query } = req.query;
+
+    if(!query) {
+        throw new ApiError(400, "Search Query is required");
+    }
+
+    const bookmarks = await Bookmark.find(
+        {
+            $text: { $search: query },
+            userId
+        },
+        {
+            score: { $meta: "textScore" }
+        }
+    ).sort({ score: { $meta: "textScore" } });
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, bookmarks, "Search results fetched successfully")
+        );
+});
+
 export {
     getAllBookmarks,
     addABookmark,
     deleteABookmark,
-    updateABookmark
+    updateABookmark,
+    searchBookmarks
 }
