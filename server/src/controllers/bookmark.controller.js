@@ -50,11 +50,61 @@ const addABookmark = asyncHandler(async (req, res) => {
 });
 
 const deleteABookmark = asyncHandler(async (req, res) => {
-    
-})
+    const userId = req.user?._id;
+    const bookmarkId = req.params.id;
+
+    if(!mongoose.Types.ObjectId.isValid(bookmarkId)) {
+        throw new ApiError(400, "Invalid Bookmark ID");
+    }
+
+    const bookmark = await Bookmark.findOne({_id: bookmarkId, userId});
+
+    if(!bookmark) {
+        throw new ApiError(404, "Bookmark not found or not authorized to delete");
+    }
+
+    await bookmark.deleteOne();
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, null, "Bookmark deleted successfully")
+        );
+});
+
+const updateABookmark = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const bookmarkId = req.params.id;
+
+    if(!mongoose.Types.ObjectId.isValid(bookmarkId)) {
+        throw new ApiError(400, "Invalid bookmark ID")
+    }
+
+    const bookmark= await Bookmark.findOne({ _id: bookmarkId, userId });
+
+    if(!bookmark) {
+        throw new ApiError(404, "Bookmark not found or not authorized to update");
+    }
+
+    const { title, url, notes, tags } = req.body;
+
+    if(title !== undefined) bookmark.title = title;
+    if(url !== undefined) bookmark.url = url;
+    if(notes !== undefined) bookmark.notes = notes;
+    if(tags !== undefined) bookmark.tags = tags;
+
+    await bookmark.save();
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, bookmark, "Bookmark updated successfully")
+        );
+});
 
 export {
     getAllBookmarks,
     addABookmark,
-    deleteABookmark
+    deleteABookmark,
+    updateABookmark
 }

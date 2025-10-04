@@ -3,7 +3,8 @@ import{verifyJWT} from "../middlewares/auth.middleware.js";
 import {
     getAllBookmarks,
     addABookmark,
-    deleteABookmark
+    deleteABookmark,
+    updateABookmark
 } from "../controllers/bookmark.controller.js"
 
 const router = Router();
@@ -14,6 +15,10 @@ router
     .get(getAllBookmarks)
     .post(addABookmark)
 
-router.route("/:id", deleteABookmark)
+router
+    .route("/:id")
+    .delete(deleteABookmark)
+    .put(updateABookmark)
+
 
 export default router
