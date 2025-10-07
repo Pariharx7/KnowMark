@@ -23,6 +23,12 @@ const bookmarkSchema = new Schema({
         lowercase: true,
         maxlength: 30
     }],
+    category: {
+        type: String,
+        trim: true,
+        maxlength: 50,
+        default: ""
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -33,6 +39,7 @@ const bookmarkSchema = new Schema({
 })
 
 bookmarkSchema.index({userId: 1, url: 1}, { unique: true });
+bookmarkSchema.index({ userId: 1, category: 1});
 bookmarkSchema.plugin(mongooseAggregatePaginate)
 
 bookmarkSchema.index({title: "text", notes: "text"});

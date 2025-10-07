@@ -12,6 +12,13 @@ const getAllBookmarks = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized: User not found");
         }
 
+        const { category } = req.query;
+
+        const filter = { userId };
+        if(category) {
+            filter.category = category;
+        }
+
         const bookmarks = await Bookmark.find({ userId }).sort({createdAt: -1});
 
         return res
@@ -28,7 +35,7 @@ const getAllBookmarks = asyncHandler(async (req, res) => {
 const addABookmark = asyncHandler(async (req, res) => {
     const userId = req.user?._id;
 
-    const { url, title, notes = "", tags = [] } = req.body;
+    const { url, title, notes = "", tags = [], category = "" } = req.body;
 
     if(!url || !title){
         throw new ApiError(400, "URL and title are required");
@@ -39,6 +46,7 @@ const addABookmark = asyncHandler(async (req, res) => {
         title,
         notes,
         tags,
+        category,
         userId
     });
 
@@ -86,12 +94,13 @@ const updateABookmark = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Bookmark not found or not authorized to update");
     }
 
-    const { title, url, notes, tags } = req.body;
+    const { title, url, notes, tags, category } = req.body;
 
     if(title !== undefined) bookmark.title = title;
     if(url !== undefined) bookmark.url = url;
     if(notes !== undefined) bookmark.notes = notes;
     if(tags !== undefined) bookmark.tags = tags;
+    if(category !== undefined) bookmark.category = category;
 
     await bookmark.save();
 
