@@ -1,9 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//toast download
-// import { toast } from "sooner";
-
-// install react icons
+import { InputBox } from "./InputBox";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -19,7 +16,7 @@ const LoginForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({...formData, [name]: value});
+        setFormData({ ...formData, [name]: value });
     };
 
     const togglePasswordVisibility = () => {
@@ -41,53 +38,43 @@ const LoginForm = () => {
         //     TransformStream.error(XPathResult.message);
         // }
     }
-    
+
     return (
-        <div>
-            <h1>Welcome Back</h1>
-            <h2>Log in to continue</h2>
+        <div className="flex h-screen justify-center items-center">
+            <div className="border rounded-lg w-full max-w-xl">
+                <h1 className="text-red-500">Welcome Back</h1>
+                <h2>Log in to continue</h2>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <input 
-                        type="email"
-                        name="email" 
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email Address"
-                        required
-                        // className=""
-                        />
-                </div>
-                <div>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Password"
-                        required
-                        // className=""
-                        />
-                </div>
-                <div>
-                    <a href="#">Forgot Your password?</a>
-                </div>
+                <form onSubmit={handleSubmit}>
 
-                <button
-                    type="submit"
-                    disabled={loading}
+                    <div>
+                        <InputBox
+                            inputLabel={"Email"}
+                            inputType={"text"}
+                            placeholder={"enter ur emial"}
+                            onChange={() => console.log("login")}
+                        />
+                    </div>
+
+                    <div>
+                        <a href="#">Forgot Your password?</a>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
                     // className=""
-                >
-                    {loading ? 'Logging In...' : 'Log In'} 
-                </button>
-            </form>
+                    >
+                        {loading ? 'Logging In...' : 'Log In'}
+                    </button>
+                </form>
 
 
-        <p>
-            Don't have an account?{' '}
-            <a href="#">Register</a>
-        </p>
+                <p>
+                    Don't have an account?{' '}
+                    <a href="#">Register</a>
+                </p>
+            </div>
         </div>
     );
 };
