@@ -1,47 +1,54 @@
-import mongoose, {mongo, Schema} from "mongoose";
+import mongoose, { mongo, Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
-const bookmarkSchema = new Schema({
+const bookmarkSchema = new Schema(
+  {
     url: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     title: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
     },
     notes: {
-        type: String,
-        trim: true,
-        default: ""
+      type: String,
+      trim: true,
+      default: "",
     },
-    tags: [{
+    tags: [
+      {
         type: String,
         trim: true,
         lowercase: true,
-        maxlength: 30
-    }],
+        maxlength: 30,
+        index: true,
+      },
+    ],
     category: {
-        type: String,
-        trim: true,
-        maxlength: 50,
-        default: ""
+      type: String,
+      trim: true,
+      maxlength: 50,
+      default: "",
     },
     userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    }
-}, {
-    timestamps: true
-})
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-bookmarkSchema.index({userId: 1, url: 1}, { unique: true });
-bookmarkSchema.index({ userId: 1, category: 1});
-bookmarkSchema.plugin(mongooseAggregatePaginate)
+bookmarkSchema.index({ userId: 1, url: 1 }, { unique: true });
+bookmarkSchema.index({ userId: 1, category: 1 });
+bookmarkSchema.plugin(mongooseAggregatePaginate);
 
-bookmarkSchema.index({title: "text", notes: "text"});
+bookmarkSchema.index({ title: "text", notes: "text" });
 
-export const Bookmark = mongoose.model("Bookmark", bookmarkSchema)
+export const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
