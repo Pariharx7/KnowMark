@@ -8,6 +8,7 @@ import hpp from "hpp";
 import rateLimit from "express-rate-limit";
 import session from "express-session";
 import passport from "passport";
+
 import { morganMiddleware } from "./config/index.js";
 import { ApiError } from "./api/common/utils/ApiError.js";
 
@@ -58,14 +59,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(morganMiddleware);
 
-//routes import
-import healthRouter from "./routes/healthRouter.routes.js";
-import userRouter from "./routes/userRouter.routes.js";
-import bookmarkRouter from "./routes/bookmarkRouter.routes.js";
+// api routes import
+import { healthCheckRouter } from "./api/common/routes/index.js";
+import { errorHandler } from "./api/common/middlewares/index.js";
+
+// healthcheck
+app.use("/api/healthcheck", healthCheckRouter);
+
+// api v1 routes
+import {
+  authRouter,
+  userRouter,
+  bookmarkRouter,
+} from "./api/v1/routes/index.js";
 
 //route declaration
-app.use("/api/v1/health", healthRouter);
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/bookmarks", bookmarkRouter);
+
+app.use(errorHandler);
 
 export { app };
