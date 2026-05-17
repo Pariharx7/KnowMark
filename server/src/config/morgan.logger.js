@@ -1,5 +1,5 @@
 import morgan from "morgan";
-import { logger } from "./index";
+import { logger } from "./index.js";
 
 const messageStream = {
   write: (message) => logger.verbose(message.trim()),
