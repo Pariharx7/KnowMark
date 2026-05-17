@@ -1,7 +1,7 @@
 import "dotenv/config";
 
-import { connectDB, logger } from "./config/index";
-import app from "./app";
+import { connectDB, logger } from "./config/index.js";
+import app from "./app.js";
 
 await connectDB();
 
