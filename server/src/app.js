@@ -8,9 +8,12 @@ import hpp from "hpp";
 import rateLimit from "express-rate-limit";
 import session from "express-session";
 import passport from "passport";
+import dotenv from "dotenv";
 
 import { morganMiddleware } from "./config/index.js";
 import { ApiError } from "./api/common/utils/ApiError.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -80,4 +83,4 @@ app.use("/api/v1/bookmarks", bookmarkRouter);
 
 app.use(errorHandler);
 
-export { app };
+export default app;
