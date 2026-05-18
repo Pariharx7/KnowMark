@@ -1,4 +1,4 @@
-import { User } from "./user.model";
-import { Bookmark } from "./bookmark.model";
+import { User } from "./user.model.js";
+import { Bookmark } from "./bookmark.model.js";
 
 export { User, Bookmark };
