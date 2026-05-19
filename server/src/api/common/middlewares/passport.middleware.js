@@ -2,7 +2,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 import { User } from "../models/index.js";
-import { ApiError } from "../utils/ApiError.js";
+import { ApiError } from "../utils/index.js";
 
 passport.serializeUser((user, next) => {
   next(null, user._id);
