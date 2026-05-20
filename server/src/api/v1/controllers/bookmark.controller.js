@@ -1,145 +1,110 @@
-import mongoose from "mongoose";
-import { Bookmark } from "../models/bookmark.model.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
+import {
+  ApiResponse,
+  asyncHandler,
+  ApiError,
+} from "../../common/utils/index.js";
+import { bookmarkService } from "../services/index.js";
+import { bookmarkValidator } from "../validators/index.js";
 
+const { ValidateCreate, ValidateUpdate } = bookmarkValidator;
 const getAllBookmarks = asyncHandler(async (req, res) => {
-    try{
-        const userId = req.user?._id;
+  const { page, limit } = req.query;
 
-        if(!userId) {
-            throw new ApiError(401, "Unauthorized: User not found");
-        }
+  const { bookmarks, pagination } = await bookmarkService.getBookmarks(
+    req.user._id,
+    page,
+    limit
+  );
 
-        const { category } = req.query;
-
-        const filter = { userId };
-        if(category) {
-            filter.category = category;
-        }
-
-        const bookmarks = await Bookmark.find({ userId }).sort({createdAt: -1});
-
-        return res
-            .status(200)
-            .json(
-                new ApiResponse(200, bookmarks, "Bookmarks fetched successfully")
-            );
-    } catch(error){
-        console.error('Error fetching bookmarks:', error);
-        res.status(500).json({error: 'Server error'});
-    }
-})
+  return res.json(
+    new ApiResponse(
+      200,
+      { bookmarks, pagination },
+      "Bookmarks fetched successfully"
+    )
+  );
+});
 
 const addABookmark = asyncHandler(async (req, res) => {
-    const userId = req.user?._id;
+  const userId = req.user?._id;
 
-    const { url, title, notes = "", tags = [], category = "" } = req.body;
+  const { error } = ValidateCreate(req.body);
+  if (error) throw new ApiError(400, error.issues[0].message, []);
 
-    if(!url || !title){
-        throw new ApiError(400, "URL and title are required");
-    }
+  const { url, title, notes = "", tags = [], category = "" } = req.body;
 
-    const newBookmark = await Bookmark.create({
-        url,
-        title,
-        notes,
-        tags,
-        category,
-        userId
-    });
+  const { bookmark } = await bookmarkService.addBookmark(
+    userId,
+    url,
+    title,
+    notes,
+    tags,
+    category
+  );
 
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(201, newBookmark, "Bookmark created successfully")
-        )
+  return res
+    .status(201)
+    .json(new ApiResponse(201, { bookmark }, "Bookmark added successfully"));
 });
 
 const deleteABookmark = asyncHandler(async (req, res) => {
-    const userId = req.user?._id;
-    const bookmarkId = req.params.id;
+  await bookmarkService.deleteBookmark(req.user._id, req.params.bookmarkId);
 
-    if(!mongoose.Types.ObjectId.isValid(bookmarkId)) {
-        throw new ApiError(400, "Invalid Bookmark ID");
-    }
-
-    const bookmark = await Bookmark.findOne({_id: bookmarkId, userId});
-
-    if(!bookmark) {
-        throw new ApiError(404, "Bookmark not found or not authorized to delete");
-    }
-
-    await bookmark.deleteOne();
-
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, null, "Bookmark deleted successfully")
-        );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Bookmark deleted successfully"));
 });
 
 const updateABookmark = asyncHandler(async (req, res) => {
-    const userId = req.user?._id;
-    const bookmarkId = req.params.id;
+  const { error } = ValidateUpdate(req.body);
+  throw new ApiError(400, error.issues[0].message);
 
-    if(!mongoose.Types.ObjectId.isValid(bookmarkId)) {
-        throw new ApiError(400, "Invalid bookmark ID")
-    }
+  const updatedBookmark = await bookmarkService.updateBookmark(
+    req.user._id,
+    req.params.bookmarkId,
+    req.body
+  );
 
-    const bookmark= await Bookmark.findOne({ _id: bookmarkId, userId });
-
-    if(!bookmark) {
-        throw new ApiError(404, "Bookmark not found or not authorized to update");
-    }
-
-    const { title, url, notes, tags, category } = req.body;
-
-    if(title !== undefined) bookmark.title = title;
-    if(url !== undefined) bookmark.url = url;
-    if(notes !== undefined) bookmark.notes = notes;
-    if(tags !== undefined) bookmark.tags = tags;
-    if(category !== undefined) bookmark.category = category;
-
-    await bookmark.save();
-
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, bookmark, "Bookmark updated successfully")
-        );
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        201,
+        { bookmark: updatedBookmark },
+        "Bookmark updated successfully"
+      )
+    );
 });
 
 const searchBookmarks = asyncHandler(async (req, res) => {
-    const userId = req.user?._id;
-    const { query } = req.query;
+  const userId = req.user?._id;
+  const { query } = req.query;
 
-    if(!query) {
-        throw new ApiError(400, "Search Query is required");
+  if (!query) {
+    throw new ApiError(400, "Search Query is required");
+  }
+
+  const bookmarks = await Bookmark.find(
+    {
+      $text: { $search: query },
+      userId,
+    },
+    {
+      score: { $meta: "textScore" },
     }
+  ).sort({ score: { $meta: "textScore" } });
 
-    const bookmarks = await Bookmark.find(
-        {
-            $text: { $search: query },
-            userId
-        },
-        {
-            score: { $meta: "textScore" }
-        }
-    ).sort({ score: { $meta: "textScore" } });
-
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, bookmarks, "Search results fetched successfully")
-        );
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, bookmarks, "Search results fetched successfully")
+    );
 });
 
-export {
-    getAllBookmarks,
-    addABookmark,
-    deleteABookmark,
-    updateABookmark,
-    searchBookmarks
-}
+export const bookmarkController = {
+  getAllBookmarks,
+  addABookmark,
+  deleteABookmark,
+  updateABookmark,
+  searchBookmarks,
+};
