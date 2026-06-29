@@ -95,17 +95,14 @@ const signOutUser = (id) => {
 
 const getAuthStatus = (accessToken) => {
   if (!accessToken) return false;
-
   try {
     const decodedToken = jwt.verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET
     );
-
     return true;
   } catch (error) {
     console.log(error?.message);
-
     return false;
   }
 };
