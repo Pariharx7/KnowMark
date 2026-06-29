@@ -44,6 +44,12 @@ const userSchema = new Schema(
       enum: ["Email-Password", "Google"],
       default: "Email-Password",
     },
+    starredBookmarks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Bookmark",
+      },
+    ],
   },
   {
     timestamps: true,
