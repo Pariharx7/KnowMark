@@ -5,6 +5,8 @@ import {
 } from "../../common/utils/index.js";
 import { bookmarkService } from "../services/index.js";
 import { bookmarkValidator } from "../validators/index.js";
+import { Bookmark } from "../../common/models/index.js";
+import mongoose from "mongoose";
 
 const { ValidateCreate, ValidateUpdate } = bookmarkValidator;
 const getAllBookmarks = asyncHandler(async (req, res) => {
@@ -23,6 +25,26 @@ const getAllBookmarks = asyncHandler(async (req, res) => {
       "Bookmarks fetched successfully"
     )
   );
+});
+
+const getBookmarkById = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  const bookmarkId = req.params.id;
+
+  const { bookmark, isStarred } = await bookmarkService.getBookmark(
+    userId,
+    bookmarkId
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { bookmark, isStarred },
+        "Bookmark fetched successfully"
+      )
+    );
 });
 
 const addABookmark = asyncHandler(async (req, res) => {
@@ -48,7 +70,7 @@ const addABookmark = asyncHandler(async (req, res) => {
 });
 
 const deleteABookmark = asyncHandler(async (req, res) => {
-  await bookmarkService.deleteBookmark(req.user._id, req.params.bookmarkId);
+  await bookmarkService.deleteBookmark(req.user._id, req.params.id);
 
   return res
     .status(200)
@@ -57,11 +79,11 @@ const deleteABookmark = asyncHandler(async (req, res) => {
 
 const updateABookmark = asyncHandler(async (req, res) => {
   const { error } = ValidateUpdate(req.body);
-  throw new ApiError(400, error.issues[0].message);
+  if (error) throw new ApiError(400, error.issues[0].message);
 
   const updatedBookmark = await bookmarkService.updateBookmark(
     req.user._id,
-    req.params.bookmarkId,
+    req.params.id,
     req.body
   );
 
@@ -78,33 +100,88 @@ const updateABookmark = asyncHandler(async (req, res) => {
 
 const searchBookmarks = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
-  const { query } = req.query;
+  const { query, page, limit } = req.query;
+  if (!query) throw new ApiError(400, "Search Query is required");
+  try {
+    const { bookmarks, pagination } = await bookmarkService.searchBookmark(
+      query,
+      page,
+      limit,
+      userId
+    );
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { bookmarks, pagination },
+          "Search results fetched successfully"
+        )
+      );
+  } catch (error) {
+    console.error(error);
+    throw new ApiError(500, "An error occurred while searching for bookmarks");
+  }
+});
 
-  if (!query) {
-    throw new ApiError(400, "Search Query is required");
+const getStarredBookmarks = asyncHandler(async (req, res) => {
+  const { page, limit } = req.query;
+
+  const { bookmarks, pagination } = await bookmarkService.getStarredBookmarks(
+    req.user._id,
+    page,
+    limit
+  );
+
+  return res.json(
+    new ApiResponse(
+      200,
+      { bookmarks, pagination },
+      "Starred Bookmarks fetched successfully"
+    )
+  );
+});
+
+const starBookmark = asyncHandler(async (req, res) => {
+  const bookmarkId = req.params.id;
+  if (!bookmarkId || !mongoose.Types.ObjectId.isValid(bookmarkId)) {
+    throw new ApiError(400, "A valid bookmark Id is required");
   }
 
-  const bookmarks = await Bookmark.find(
-    {
-      $text: { $search: query },
-      userId,
-    },
-    {
-      score: { $meta: "textScore" },
-    }
-  ).sort({ score: { $meta: "textScore" } });
+  const { user } = await bookmarkService.starBookmark(
+    req.user._id,
+    req.params.id
+  );
+
+  return res
+    .status(201)
+    .json(new ApiResponse(201, { user }, "Bookmark starred successfully"));
+});
+
+const unstarBookmark = asyncHandler(async (req, res) => {
+  const bookmarkId = req.params.id;
+  if (!bookmarkId || !mongoose.Types.ObjectId.isValid(bookmarkId)) {
+    throw new ApiError(400, "A valid bookmark Id is required");
+  }
+
+  const { user } = await bookmarkService.unstarBookmark(
+    req.user._id,
+    req.params.id
+  );
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(200, bookmarks, "Search results fetched successfully")
-    );
+    .json(new ApiResponse(200, { user }, "Bookmark unstarred successfully"));
 });
 
 export const bookmarkController = {
   getAllBookmarks,
+  getBookmark: getBookmarkById,
   addABookmark,
   deleteABookmark,
   updateABookmark,
   searchBookmarks,
+  getStarredBookmarks,
+  starBookmark,
+  unstarBookmark,
 };
