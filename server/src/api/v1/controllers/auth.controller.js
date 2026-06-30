@@ -24,6 +24,7 @@ const registerUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    path: "/",
   };
 
   return res
@@ -54,6 +55,7 @@ const authenticateUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    path: "/",
   };
 
   return res
@@ -69,12 +71,13 @@ const authenticateUser = asyncHandler(async (req, res) => {
 });
 
 const unathenticateUser = asyncHandler(async (req, res) => {
-  await authService.signOut(req.user._id);
+  await authService.signOut(req.user?._id);
 
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    path: "/",
   };
 
   return res
@@ -85,9 +88,11 @@ const unathenticateUser = asyncHandler(async (req, res) => {
 });
 
 const getAuthStatus = asyncHandler((req, res) => {
+  // res.set("Cache-Control", "no-store");
+  // res.set("Etag", false);
+
   const token =
     req.cookies?.accessToken || req.headers["authorization"]?.split(" ")[1];
-
   const authenticated = authService.authStatus(token);
 
   return res
@@ -106,6 +111,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    path: "/",
   };
 
   return res
