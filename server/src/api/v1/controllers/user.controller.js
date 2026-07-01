@@ -7,15 +7,16 @@ import { userService } from "../services/index.js";
 import { userValidator } from "../validators/index.js";
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+  res.set("Cache-Control", "no-store");
+  res.set("Etag", false);
   const currentUser = await userService.getUser(req.user._id);
-
   return res.json(
     new ApiResponse(200, { currentUser }, "User fetched successfully")
   );
 });
 
 const updateCurrentUser = asyncHandler(async (req, res) => {
-  const { error } = ValidateUpdate(req.body);
+  const { error } = userValidator.ValidateUpdate(req.body);
   if (error) throw new ApiError(400, error.issues[0].message);
 
   const updatedUser = await userService.updateUser(req.user._id, req.body);
