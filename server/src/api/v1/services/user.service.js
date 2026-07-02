@@ -2,7 +2,9 @@ import { User } from "../../common/models/index.js";
 import { ApiError, getAvatarName } from "../../common/utils/index.js";
 
 const getUserById = async (userId) => {
-  return User.findById(userId).select("-password -refreshToken -__v");
+  return User.findById(userId).select(
+    "-password -refreshToken -__v -bookmarks"
+  );
 };
 
 const updateCurrentUser = async (userId, userData) => {
