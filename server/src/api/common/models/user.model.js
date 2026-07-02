@@ -27,14 +27,14 @@ const userSchema = new Schema(
       minlength: 3,
       maxlength: 255,
     },
+    profilePicture: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
       minlength: 6,
       maxlength: 1024,
-    },
-    profilePicture: {
-      type: String,
     },
     refreshToken: {
       type: String,
@@ -53,8 +53,31 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+userSchema.post(["find", "findOne", "findById"], async function (docs) {
+  const bookmarks = Array.isArray(docs) ? docs : [docs];
+
+  for (const doc of bookmarks) {
+    if (doc) {
+      doc.totalBookmarks = await mongoose
+        .model("Bookmark")
+        .countDocuments({ userId: doc._id });
+    }
+  }
+});
+
+userSchema
+  .virtual("totalBookmarks")
+  .get(function () {
+    return this._totalBookmarks;
+  })
+  .set(function (val) {
+    this._totalBookmarks = val;
+  });
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
