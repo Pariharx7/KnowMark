@@ -50,7 +50,7 @@ passport.use(
           name: profile._json.name,
           email: profile._json.email,
           password: profile._json.sub,
-          avatar: profile._json.picture,
+          profilePicture: profile._json.picture,
           signInType: "Google",
         });
 
