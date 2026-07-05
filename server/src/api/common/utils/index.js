@@ -3,5 +3,13 @@ import { asyncHandler } from "./asyncHandler.js";
 import { ApiResponse } from "./ApiResponse.js";
 import { getAvatarName } from "./avatarHelper.js";
 import { paginateQuery } from "./pagination.js";
+import { cloudinary } from "./cloudinary.service.js";
 
-export { ApiError, asyncHandler, ApiResponse, getAvatarName, paginateQuery };
+export {
+  ApiError,
+  asyncHandler,
+  ApiResponse,
+  getAvatarName,
+  paginateQuery,
+  cloudinary,
+};
