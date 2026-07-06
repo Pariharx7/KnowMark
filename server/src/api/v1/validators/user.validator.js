@@ -1,104 +1,48 @@
 import z from "zod";
 
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
+
 const userUpdateValidator = (user) => {
-  const nameSchema = z
-    .object({
-      name: z
-        .string({
-          required_error: "Name is required",
-          invalid_type_error: "Name must be a string",
-        })
-        .trim()
-        .min(3, { message: "Must be 3 or more characters long" })
-        .max(255, { message: "Must be 255 or fewer characters long" }),
-    })
-    .strict();
-
-  const passwordSchema = z
-    .object({
-      oldPassword: z
-        .string({
-          required_error: "Old Password is required",
-        })
-        .min(1, "Old Password is required"),
-
-      newPassword: z
-        .string({ required_error: "New Password is required" })
-        .min(
-          6,
-          "Password must have at least 6 characters, one uppercase, one lowercase letter, one  digit, and one special character."
-        )
-        .refine((password) => {
-          const passwordRegex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
-          return passwordRegex.test(password);
-        }, "Password must have at least 6 characters, one uppercase, one lowercase letter, one  digit, and one special character."),
-
-      confirmNewPassword: z.string({
-        required_error: "Please confirm New Passsword",
-      }),
-    })
-    .strict()
-    .refine(
-      (data) =>
-        data.newPassword && data.confirmNewPassword
-          ? data.newPassword === data.confirmNewPassword
-          : true,
-      {
-        message: "Passwords do not match",
-        path: ["confirmNewPassowrd"],
-      }
-    );
-
+  console.log("User in ", user);
   const schema = z
     .object({
       name: z
-        .string({
-          required_error: "Name is required",
-          invalid_type_error: "Name must be a string",
-        })
+        .string()
         .trim()
         .min(3, { message: "Must be 3 or more characters long" })
-        .max(255, { message: "Must be 255 or fewer characters long" }),
+        .max(255, { message: "Must be 255 or fewer characters long" })
+        .optional(),
 
-      oldpassword: z
-        .string({ required_error: "Old Password is required" })
-        .min(1, "Old Password is required"),
+      // `image` is expected to be a string (data URL or remote URL)
+      image: z.string().optional(),
+
+      oldPassword: z.string().min(1).optional(),
 
       newPassword: z
-        .string({ required_error: "New Password is required" })
-        .min(
-          6,
-          "Password must have at least 6 characters, one uppercase letter, one lowercase letter, one digit, and one special character."
-        )
-        .refine((password) => {
-          // At least one uppercase letter, one lowercase letter, one digit, and one special character
-          const passwordRegex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
-          return passwordRegex.test(password);
-        }, "Password must have at least 6 characters, one uppercase letter, one lowercase letter, one digit, and one special character."),
+        .string()
+        .min(6)
+        .refine((p) => passwordRegex.test(p), {
+          message:
+            "Password must have at least 6 characters, one uppercase, one lowercase letter, one digit, and one special character.",
+        })
+        .optional(),
 
-      confirmNewPassword: z.string({
-        required_error: "Password Confirmation is required",
-      }),
+      confirmNewPassword: z.string().optional(),
     })
     .strict()
     .refine(
-      (data) =>
-        data.newPassword && data.confirmNewPassword
-          ? data.newPassword === data.confirmNewPassword
-          : true,
-      {
-        message: "Passwords do not match",
-        path: ["confirmNewPassword"],
-      }
+      (data) => {
+        if (data.oldPassword) {
+          return (
+            typeof data.newPassword === "string" &&
+            typeof data.confirmNewPassword === "string" &&
+            data.newPassword === data.confirmNewPassword
+          );
+        }
+        return true;
+      },
+      { message: "Passwords do not match", path: ["confirmNewPassword"] }
     );
-
-  if (!user.name) {
-    return passwordSchema.safeParse(user);
-  } else if (!user.oldPassword) {
-    return nameSchema.safeParse(user);
-  }
 
   return schema.safeParse(user);
 };
