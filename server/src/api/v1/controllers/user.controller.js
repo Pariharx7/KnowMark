@@ -16,8 +16,11 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateCurrentUser = asyncHandler(async (req, res) => {
+  console.log("BODY ", req.body);
   const { error } = userValidator.ValidateUpdate(req.body);
-  if (error) throw new ApiError(400, error.issues[0].message);
+  if (error) {
+    throw new ApiError(400, error.issues[0].message);
+  }
 
   const updatedUser = await userService.updateUser(req.user._id, req.body);
 
