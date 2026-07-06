@@ -11,7 +11,6 @@ const generateAccessAndRefreshTokens = async (userId) => {
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    // attach refresh token to user document to avoid refreshing access token with multiple refresh tokens
     user.refreshToken = refreshToken;
 
     await user.save();
@@ -44,9 +43,16 @@ const registerUser = async (username, name, email, password) => {
     user._id
   );
 
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken -__v"
-  );
+  const createdUserDoc = await User.findById(user._id);
+  const createdUser = createdUserDoc ? createdUserDoc.toObject() : null;
+  if (createdUser) {
+    createdUser.avatar = createdUser.profilePicture
+      ? createdUser.profilePicture
+      : `https://ui-avatars.com/api/?name=${getAvatarName(name)}&size=250&background=4d2be2&color=ffffff`;
+    delete createdUser.password;
+    delete createdUser.refreshToken;
+    delete createdUser.__v;
+  }
 
   if (!createdUser)
     throw new ApiError(500, "Something went wrong while registering the user");
@@ -74,9 +80,16 @@ const signInUser = async (email, password) => {
     user._id
   );
 
-  const signedInUser = await User.findById(user._id).select(
-    "-password -refreshToken -__v"
-  );
+  const signedInUserDoc = await User.findById(user._id);
+  const signedInUser = signedInUserDoc ? signedInUserDoc.toObject() : null;
+  if (signedInUser) {
+    signedInUser.avatar = signedInUser.profilePicture
+      ? signedInUser.profilePicture
+      : `https://ui-avatars.com/api/?name=${getAvatarName(signedInUser.name)}&size=250&background=4d2be2&color=ffffff`;
+    delete signedInUser.password;
+    delete signedInUser.refreshToken;
+    delete signedInUser.__v;
+  }
 
   return { user: signedInUser, accessToken, refreshToken };
 };
