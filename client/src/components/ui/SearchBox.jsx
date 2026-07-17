@@ -1,7 +1,7 @@
 const SearchBox = ({ props, type, placeholder, error, id }) => {
     return (
-        <div className="w-full max-w-sm">
-            <div className="relative flex items-center rounded-md border border-input bg-background dark:border-dark-800">
+        <div className="w-full max-w-full">
+            <div className="relative flex items-center rounded-full border border-input bg-background dark:border-dark-800">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="absolute h-10 py-3 pl-3 pr-2 text-gray-500 dark:text-gray-400"
@@ -22,7 +22,7 @@ const SearchBox = ({ props, type, placeholder, error, id }) => {
                     type={type || 'search'}
                     placeholder={placeholder}
                     id={id}
-                    className="flex h-11 w-full rounded-md bg-transparent py-2 pl-10 pr-3 text-sm outline-none ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-[#9CA3AF]"
+                    className="flex flex-1 h-9 w-full max-w-full rounded-full bg-transparent py-2 pl-10 pr-3 text-sm outline-none ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-[#9CA3AF]"
                 />
             </div>
             {error && (
