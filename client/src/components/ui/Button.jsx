@@ -1,3 +1,5 @@
+import { cn } from "@config/utils";
+
 const Button = ({
     type = 'button',
     onClick,
@@ -7,7 +9,8 @@ const Button = ({
     corners = 'md',
     fullWidth = false,
     isDisabled = false,
-    iconPosition = 'left'
+    iconPosition = 'left',
+    className
 }) => {
     const baseClasses = `inline-flex items-center justify-center text-sm font-medium dark:shadow-2xl transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-80 px-6 py-3`;
 
@@ -26,7 +29,7 @@ const Button = ({
         <button
             type={type}
             onClick={onClick || (() => { })}
-            className={`${combinedClasses} flex items-center cursor-pointer`}
+            className={cn(`${combinedClasses} flex items-center cursor-pointer`, className)}
             disabled={isDisabled}
         >
             <span
