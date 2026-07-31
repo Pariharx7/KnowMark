@@ -1,10 +1,11 @@
 import { cn } from "@config/utils";
 
-const InputBox = ({ label, type, placeholder, props, id, error, className, variant = "primary" }) => {
+const InputBox = ({ label, type, placeholder, props, id, error, className, variant = "primary", isEnabled = false, value = "" }) => {
     const variants = {
         primary: "h-10 py-2 text-sm",
         secondary: "h-20 py-1 text-xl"
     }
+
     return (
         <div>
             <div className="flex flex-col space-y-1">
@@ -17,6 +18,7 @@ const InputBox = ({ label, type, placeholder, props, id, error, className, varia
                 </label>
 
                 <input
+                    value={value}
                     {...props}
                     type={type}
                     placeholder={placeholder}
@@ -24,6 +26,7 @@ const InputBox = ({ label, type, placeholder, props, id, error, className, varia
                     className={cn("ring-offset-backgroundoutline-none flex w-full rounded-md border border-input bg-background px-3 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-800 dark:placeholder:text-[#9CA3AF]",
                         `${variant === "primary" ? `${variants.primary}` : `${variants.secondary}`}`,
                         className)}
+                    disabled={isEnabled}
                 />
                 {
                     error && (
