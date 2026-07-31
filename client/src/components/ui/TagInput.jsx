@@ -25,7 +25,7 @@ const TagInput = ({ props, tags, setTags, error }) => {
                 {...restProps}
                 type="text"
                 placeholder="e.g tech, react, tailwindcss"
-                // value={tags.join(', ')}
+                value={(tags || []).join(', ')}
                 onChange={handleChange}
                 className="w-full px-3 h-20 py-1 text-xl border border-gray-300 rounded-lg shadow-sm"
             />
