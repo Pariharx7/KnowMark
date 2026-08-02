@@ -1,4 +1,5 @@
 import { useRef, useMemo } from "react";
+import { markdownToHtml } from "../../config/utils";
 
 const TEXT_TOOLBAR_BUTTONS = [
     { label: 'B', title: 'Bold', prefix: '**', suffix: '**' },
@@ -9,40 +10,6 @@ const TEXT_TOOLBAR_BUTTONS = [
     { label: 'Clear', title: 'Clear', prefix: '', suffix: '' },
 ];
 
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function markdownToHtml(md = '') {
-    if (!md) return '';
-    let html = escapeHtml(md);
-
-    // Code blocks ``` ```
-    html = html.replace(/```([\s\S]*?)```/g, (m, p1) => `<pre class="bg-gray-900 text-white p-3 rounded overflow-auto"><code>${escapeHtml(p1)}</code></pre>`);
-
-    // Inline code `code`
-    html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 rounded">$1</code>');
-
-    // Headings
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold">$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold">$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold">$1</h1>');
-
-    // Bold and italic
-    html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
-
-    // Paragraphs
-    html = html.replace(/^(?!<h|<ul|<pre|<li|<code|<img)(.+)$/gim, '<p class="mb-2">$1</p>');
-
-    return html;
-}
-
 const TextEditor = ({ error, field }) => {
     const textareaRef = useRef(null);
 
@@ -51,7 +18,12 @@ const TextEditor = ({ error, field }) => {
         if (!textarea) return;
 
         if (prefix === '' && suffix === '') {
-            field.value = '';
+            field.onChange('');
+            setTimeout(() => {
+                textarea.focus();
+                textarea.setSelectionRange(0, 0);
+            }, 0);
+            return;
         }
 
         const start = textarea.selectionStart;
@@ -65,8 +37,7 @@ const TextEditor = ({ error, field }) => {
             (field.value || '').slice(end);
 
         field.onChange(newValue);
-        // move cursor to end of inserted content
-        const cursorPos = start + prefix.length + selectedText.length + suffix.length;
+        const cursorPos = start + prefix.length + selectedText.length;
         setTimeout(() => {
             textarea.focus();
             textarea.setSelectionRange(cursorPos, cursorPos);
