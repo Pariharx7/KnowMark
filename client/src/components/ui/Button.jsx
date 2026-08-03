@@ -12,7 +12,7 @@ const Button = ({
     iconPosition = 'left',
     className
 }) => {
-    const baseClasses = `inline-flex items-center justify-center text-sm font-medium dark:shadow-2xl transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-80 px-6 py-3`;
+    const baseClasses = `inline-flex items-center justify-center text-sm font-medium dark:shadow-2xl transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-80 px-6 py-3 cursor-pointer`;
 
     const variantClasses = {
         tertiary: `h-11 border border-input text-white ring-primary/70 md:text-xs bg-blue-500 hover:border-gray-300 hover:bg-white hover:text-blue-500 focus:ring-2 focus-visible:ring-2 focus-visible:ring-ring dark:border-dark-800 dark:text-gray-200 dark:ring-primary/70 dark:hover:border-dark-800 dark:hover:bg-background/50 dark:focus:ring-offset-dark-800`,
