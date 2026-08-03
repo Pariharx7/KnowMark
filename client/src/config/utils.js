@@ -36,10 +36,16 @@ function markdownToHtml(md = "") {
     return placeholder;
   });
 
-  html = html.replace(
-    /^## (.*)$/gim,
-    '<h2 class="text-xl font-semibold">$1</h2>',
-  );
+  html = html.replace(/^(#{1,6})\s*(.*)$/gim, (_, hashes, content) => {
+    const level = Math.min(6, hashes.length);
+    const classes =
+      level === 1
+        ? "text-3xl font-bold"
+        : level === 2
+        ? "text-2xl font-semibold"
+        : "text-xl font-semibold";
+    return `<h${level} class="${classes}">${content}</h${level}>`;
+  });
   html = html.replace(
     /^> (.*)$/gim,
     '<blockquote class="border-l-4 border-slate-300 pl-4 italic text-slate-600">$1</blockquote>',
