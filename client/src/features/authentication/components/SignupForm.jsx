@@ -52,6 +52,7 @@ const SignupForm = ({ onSubmit, buttonText }) => {
                     props={register('name')}
                 />
                 <InputBox
+                    label="Email Address"
                     type="email"
                     placeholder="your@gmail.com"
                     id="email"
@@ -59,12 +60,32 @@ const SignupForm = ({ onSubmit, buttonText }) => {
                     props={register('email')}
                 />
                 <PasswordBox
+                    label={"Password"}
                     props={register('password')}
                     type="password"
                     placeholder=""
                     error={errors.password?.message}
                     id="password"
                 />
+                {
+                    !errors.password && (
+                        <span className='block pl-1 pt-1 text-xs font-normal leading-tight text-gray-400'>Ensure it&apos;s at least 6 chararcters</span>
+                    )
+                }
+                <PasswordBox
+                    label={"Confirm Password"}
+                    props={register('confirmPassword')}
+                    type="password"
+                    placeholder=""
+                    error={errors.confirmPassword?.message}
+                    id="confirmPassword"
+                />
+                {
+                    !errors.confirmPassword && (
+                        <span className='block pl-1 pt-1 text-xs font-normal leading-tight text-gray-400'>Type your password again</span>
+                    )
+                }
+
                 <Button
                     label={buttonText}
                     corners="md"
