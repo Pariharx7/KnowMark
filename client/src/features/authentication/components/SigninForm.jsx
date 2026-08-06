@@ -23,7 +23,7 @@ const SigninForm = ({ onSubmit, buttonText }) => {
     }, [setFocus]);
 
 
-    const onSubmitHander = async data => {
+    const onSubmitHandler = async data => {
         try {
             await onSubmit(data);
             reset();
@@ -42,7 +42,7 @@ const SigninForm = ({ onSubmit, buttonText }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmitHander)} className="w-full">
+        <form onSubmit={handleSubmit(onSubmitHandler)} className="w-full">
             <div className="flex-col space-y-3">
                 <InputBox
                     label="Email Address"
@@ -51,6 +51,7 @@ const SigninForm = ({ onSubmit, buttonText }) => {
                     id="email"
                     error={errors.email?.message}
                     props={register('email')}
+                    value=""
                 />
                 <PasswordBox
                     label="Password"
