@@ -1,12 +1,15 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const prefersDarkMode = window.matchMedia(
-  "(prefers-color-scheme: dark)",
-).matches;
+export const useThemeStore = create(
+  persist((set) => ({
+    theme: window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light",
 
-const defaultTheme = prefersDarkMode ? "dark" : "light";
+    toggleTheme: () =>
+      set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
 
-export const useThemeStore = create((set) => ({
-  defaultTheme: defaultTheme,
-  setTheme: (newTheme) => set({ theme: newTheme }),
-}));
+    setTheme: (theme) => set({ theme }),
+  })),
+);
