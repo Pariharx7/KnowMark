@@ -4,20 +4,23 @@ import { FaSun, FaMoon } from "react-icons/fa";
 
 const ThemeToggler = () => {
     // const [theme, setTheme] = useRecoilState(themeState);
-    const { theme, setTheme } = useThemeStore();
+    // const { theme, setTheme } = useThemeStore();
     const [iconRotation, setIconRotation] = useState(0);
 
-    useEffect(() => {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-    }, [theme]);
+    const theme = useThemeStore((state) => state.theme);
+    const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
+    // useEffect(() => {
+    //     document.documentElement.classList.toggle('dark', theme === 'dark');
+    // }, [theme]);
 
     const handleThemeSwitch = () => {
-        const newTheme = theme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
+        toggleTheme();
+        console.log("togglesss theme is: ", theme)
         setIconRotation(prevRotation => prevRotation + 360);
     };
 
-    const Icon = theme === 'dark' ? FaMoon : FaSun;
+    const Icon = theme === 'light' ? FaSun : FaMoon;
 
     return (
         <div className="mr-2 flex items-start justify-end hover:cursor-pointer max-lg:mr-5 max-lg:flex-1">
