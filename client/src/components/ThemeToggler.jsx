@@ -20,7 +20,7 @@ const ThemeToggler = () => {
         setIconRotation(prevRotation => prevRotation + 360);
     };
 
-    const Icon = theme === 'light' ? FaSun : FaMoon;
+    const Icon = theme === 'light' ? FaMoon : FaSun;
 
     return (
         <div className="mr-2 flex items-start justify-end hover:cursor-pointer max-lg:mr-5 max-lg:flex-1">
@@ -33,7 +33,7 @@ const ThemeToggler = () => {
                     transform: `rotate(${iconRotation}deg)`,
                     transition: 'transform 0.5s ease-in-out',
                 }}
-                className="align-top transition-transform duration-500 lg:text-black"
+                className="align-top transition-transform duration-500 lg:text-black dark:invert"
             />
         </div>
     );
