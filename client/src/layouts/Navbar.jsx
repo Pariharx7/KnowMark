@@ -21,11 +21,11 @@ const MobileNavbar = () => {
         <div className="flex justify-between px-4 py-2 xl:hidden">
             KnowMark
             <button onClick={() => setOpen(!open)}>
-                <FaBars className="size-4 rotate-180" />
+                <FaBars className="size-4 active:rotate-90" />
             </button>
             {
                 open &&
-                <div className="fixed inset-0 z-50 h-full w-full bg-white px-4 py-2">
+                <div className="fixed inset-0 z-50 h-full w-full bg-main px-4 py-2">
                     <div className="flex justify-between">
                         KnowMark
                         <button onClick={() => setOpen(false)}
