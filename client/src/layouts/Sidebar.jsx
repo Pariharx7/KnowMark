@@ -63,7 +63,7 @@ const SideBar = () => {
                         </div>
                     }
                     <div className="flex w-full flex-col space-y-1.5 px-5">
-                        <div className="flex justify-center">
+                        <div className="flex justify-center gap-2">
                             <button
                                 type="button"
                                 className={`transation-border group flex w-full cursor-pointer items-center space-x-3 rounded-lg border p-2 transition-colors focus:outline-none ${!open && `border-transparent`} ${open && `border-gray-100 hover:bg-gray-50 dark:border-dark-800 hover:dark:bg-dark-800/40`}`}
@@ -80,7 +80,7 @@ const SideBar = () => {
                                 </span>
                                 {open && (
                                     <>
-                                        <div className="flex w-full flex-col truncate text-left">
+                                        <div className="flex w-full flex-col truncate text-left ml-3">
                                             <span className="truncate text-xs text-gray-400">
                                                 {isError ? (
                                                     <div className="font-normal leading-tight text-red-400">
