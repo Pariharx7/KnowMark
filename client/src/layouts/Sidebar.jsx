@@ -58,8 +58,8 @@ const SideBar = () => {
                 <div className="absolute bottom-4 left-0 w-full">
                     {
                         open &&
-                        <div className="flex justify-center my-2">
-                            <Button onClick={() => navigate("/create")} label="Add Bookmark" Icon={FaPlus} variant="tertiary" />
+                        <div className="mx-5 my-3">
+                            <Button onClick={() => navigate("/create")} label="Add Bookmark" Icon={FaPlus} variant="tertiary" className="w-full" />
                         </div>
                     }
                     <div className="flex w-full flex-col space-y-1.5 px-5">
