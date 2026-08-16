@@ -38,7 +38,7 @@ const Bookmarks = () => {
                 <button
                     onClick={() => setPageView("row")}
                 >
-                    <HiMiniViewColumns className="size-6 fill-blue-700 cursor-pointer" />
+                    <HiMiniViewColumns className="size-5 rotate-90 fill-blue-700 cursor-pointer" />
                 </button>
                 <button
                     onClick={() => setPageView("column")}
