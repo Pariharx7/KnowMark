@@ -57,7 +57,7 @@ const TextEditor = ({ error, field }) => {
                             type="button"
                             title={btn.title}
                             onClick={() => insertMarkdown(btn.prefix, btn.suffix)}
-                            className="px-3 py-1 bg-white border border-gray-200 rounded shadow-sm text-xs hover:bg-gray-50 cursor-pointer active:scale-94 hover:font-bold hover:scale-96"
+                            className="px-3 py-1 bg-main border border-input rounded shadow-sm text-xs hover:bg-gray-50 cursor-pointer active:scale-94 hover:font-bold hover:scale-96"
                         >
                             {btn.label}
                         </button>
@@ -74,7 +74,7 @@ const TextEditor = ({ error, field }) => {
                         onChange={(e) => field.onChange(e.target.value)}
                         onBlur={field.onBlur}
                         placeholder="Write your notes in Markdown..."
-                        className="w-full min-h-[300px] p-4 rounded-lg border border-gray-200 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-200 bg-white shadow-sm text-sm"
+                        className="w-full min-h-[300px] p-4 rounded-lg border border-input resize-none focus:outline-none focus:ring-2 focus:ring-indigo-200 bg-background shadow-sm text-sm"
                     />
                     {error && (
                         <p className="pl-1 pt-1 text-xs font-normal leading-tight text-red-400">{error}</p>
@@ -82,7 +82,8 @@ const TextEditor = ({ error, field }) => {
                 </div>
 
                 <div>
-                    <div className="min-h-[250px] p-4 rounded-lg border border-gray-100 bg-gray-50 shadow-sm overflow-auto prose max-w-none">
+                    <p className="text-center font-semibold">Output</p>
+                    <div className="min-h-[245px] p-4 rounded-lg border border-side bg-main shadow-sm overflow-auto prose max-w-none">
                         <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
                     </div>
                 </div>
