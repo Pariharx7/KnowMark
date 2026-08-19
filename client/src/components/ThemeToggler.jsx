@@ -3,20 +3,13 @@ import { useThemeStore } from "@store";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 const ThemeToggler = () => {
-    // const [theme, setTheme] = useRecoilState(themeState);
-    // const { theme, setTheme } = useThemeStore();
     const [iconRotation, setIconRotation] = useState(0);
 
     const theme = useThemeStore((state) => state.theme);
     const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
-    // useEffect(() => {
-    //     document.documentElement.classList.toggle('dark', theme === 'dark');
-    // }, [theme]);
-
     const handleThemeSwitch = () => {
         toggleTheme();
-        console.log("togglesss theme is: ", theme)
         setIconRotation(prevRotation => prevRotation + 360);
     };
 
