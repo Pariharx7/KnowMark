@@ -87,15 +87,17 @@ const FullBookmark = ({ id, title, url, notes, tags, category, date, time, user,
             <div className="prose prose-slate max-w-none py-8 text-lg leading-relaxed text-slate-700 flex flex-col">
                 <span className="text-xl font-semibold mr-3 text-accent-foreground">Notes: </span>
                 {notesHtml ? (
-                    <div className="mt-2 ml-3 text-secondary" dangerouslySetInnerHTML={{ __html: notesHtml }} />
+                    <div className="mt-2 ml-3 text-[var(--secondary)]" dangerouslySetInnerHTML={{ __html: notesHtml }} />
                 ) : (
                     <span className="italic">No notes available yet. You can edit and add notes</span>
                 )}
-                <p className="flex flex-row gap-2 text-secondary"><span className="text-xl font-semibold mr-3 text-accent-foreground">Tags:  </span>{tags || <span className="italic">No tags available yet. You can edit and add tags</span>}</p>
-                <p><span className="text-xl font-semibold mr-3 text-accent-foreground">Category: </span>{category || <span className="italic">No category available yet. You can edit and add category</span>}</p>
+                <p className="flex flex-row gap-2 text-[var(--secondary)]"><span className="text-xl font-semibold mr-3 text-accent-foreground">Tags:  </span>{tags || <span className="italic">No tags available yet. You can edit and add tags</span>}</p>
+                <p className="text-[var(--secondary)]"><span className="text-xl font-semibold mr-3 text-accent-foreground">Category: </span>{category || <span className="italic">No category available yet. You can edit and add category</span>}</p>
             </div>
             <div className="prose prose-slate max-w-none py-8 text-lg leading-relaxed text-slate-700 flex flex-col">
-                <p><span className="text-xl font-semibold mr-3 text-accent-foreground">Created on: </span>{date}<span className="text-xl font-semibold mx-2">at: </span>{time} <span className="text-xl font-semibold mx-2">by: </span>{user}</p>
+                <p><span className="text-xl font-semibold mr-3 text-accent-foreground">Created on: </span>
+                    <span className="text-[var(--primary)]">{date} </span>
+                    <span className="text-xl font-semibold mx-2 text-accent-foreground">at: </span><span className="text-[var(--primary)]">{time} </span> <span className="text-xl font-semibold mx-2 text-accent-foreground">by: </span><span className="text-[var(--secondary)]">{user} </span></p>
             </div>
         </article>
     )
