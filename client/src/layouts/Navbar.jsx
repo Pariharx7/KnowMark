@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { FaHamburger, FaBars, FaXing, FaPlus, FaUser } from "react-icons/fa"
 import { Link, useNavigate } from 'react-router-dom'
 import { navLinks } from '@config/navigation'
+import { ThemeToggler } from '@components';
 import { Button, SearchResults } from '@components/ui'
 import { SearchBookmarks } from "@features/bookmark"
 
 const Navbar = () => {
     return (
-        <div className="border-b border-neutral-200 dark:border-neutral-300">
+        <div className="shadow-header">
+            {/* <div className="border-b border-neutral-200 dark:border-neutral-300"> */}
             <MobileNavbar />
             <DesktopNavbar />
         </div>
@@ -28,8 +30,9 @@ const MobileNavbar = () => {
                 <div className="fixed inset-0 z-50 h-full w-full bg-main px-4 py-2">
                     <div className="flex justify-between">
                         KnowMark
+                        <ThemeToggler />
                         <button onClick={() => setOpen(false)}
-                            className="absolute top-2 right-2"
+                            className=" ml-4 absolute top-2 right-2"
                         >
                             <FaXing />
                         </button>
@@ -56,7 +59,7 @@ const DesktopNavbar = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="hidden py-1.5 mt-1 px-7 w-full gap-2 xl:block">
+        <div className="hidden py-1.5 mt-1 px-7 w-full gap-2 xl:block shadow-brand">
             <div className="flex items-center justify-end gap-4 w-full">
                 <Button onClick={() => navigate("/create")} label="Add Bookmark" Icon={FaPlus} variant="tertiary" corners="full" />
                 <Link to={"/profile"} className="border rounded-full px-2 py-1"><FaUser className="h-5 lg:h-6" /></Link>
