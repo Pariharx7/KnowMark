@@ -26,7 +26,7 @@ const ThemeToggler = () => {
                     transform: `rotate(${iconRotation}deg)`,
                     transition: 'transform 0.5s ease-in-out',
                 }}
-                className="align-top transition-transform duration-500 lg:text-black dark:invert"
+                className="align-top transition-transform duration-500 dark:filter"
             />
         </div>
     );
