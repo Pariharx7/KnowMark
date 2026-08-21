@@ -66,7 +66,6 @@ const SigninForm = ({ onSubmit, buttonText }) => {
                     label={buttonText}
                     corners="md"
                     fullWidth
-                    isDisabled={!isValid}
                 />
             </div>
             {errors.message && (
