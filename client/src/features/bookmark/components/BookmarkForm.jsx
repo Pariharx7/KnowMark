@@ -10,7 +10,7 @@ const BookmarkForm = ({ onSubmit, schema, enabled, buttonLabel, initialValues })
         tags: [],
         ...initialValues,
     };
-    console.log("incncc   ", defaultValues)
+
     const {
         register,
         control,
