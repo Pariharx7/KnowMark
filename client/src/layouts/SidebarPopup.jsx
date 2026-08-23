@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { useThemeStore } from "@store";
 import { AuthService } from "@features/authentication";
 import { useCurrentUser } from "@features/users";
 import { ThemeToggler } from '@components';
@@ -23,9 +24,11 @@ const Popup = ({ hidePopup }) => {
         }
     };
 
+    const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
 
     return (
-        <div className="relative min-w-[14.5rem] rounded-md border border-gray-200 bg-popover p-1 font-light text-popover-foreground shadow-lg dark:border-dark-800 dark:shadow-2xl dark:shadow-primary/40 mb-3">
+        <div className="relative min-w-[14.5rem] rounded-md border border-gray-200 bg-popover p-1 font-light text-popover-foreground shadow-lg dark:border-dark-800 dark:shadow-2xl dark:shadow-primary/40 mb-3 overflow-visible">
             <div
                 className="relative flex cursor-default select-none justify-center items-center rounded-none px-3 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:text-accent-foreground"
                 tabIndex="-1"
@@ -53,7 +56,7 @@ const Popup = ({ hidePopup }) => {
                 to="/dashboard"
                 onClick={hidePopup}
             >
-                <FaSquarespace className="h-5 dark:invert dark:filter" />
+                <FaSquarespace className="h-5 dark:filter" />
                 <span>Dashboard</span>
             </Link>
 
@@ -63,7 +66,7 @@ const Popup = ({ hidePopup }) => {
                 to="/profile"
                 onClick={hidePopup}
             >
-                <FaCog className="h-5 dark:invert dark:filter" />
+                <FaCog className="h-5 dark:filter" />
                 <span>Settings</span>
             </Link>
 
@@ -78,8 +81,12 @@ const Popup = ({ hidePopup }) => {
                 tabIndex="-1"
                 onClick={() => setTimeout(hidePopup, 500)}
             >
-                <div className="flex items-center space-x-2.5">
-                    <FaDesktop className="size-5 dark:invert dark:filter" />
+                <div
+                    className="flex items-center space-x-2.5 cursor-pointer"
+                    onClick={() => {
+                        toggleTheme();
+                    }}>
+                    <FaDesktop className="size-5 dark:filter" />
                     <span>Theme</span>
                 </div>
                 <ThemeToggler />
@@ -100,7 +107,7 @@ const Popup = ({ hidePopup }) => {
                 }}
             >
                 <span className="flex items-center space-x-2.5">
-                    <FaSignOutAlt className="h-5 dark:invert dark:filter" />
+                    <FaSignOutAlt className="h-5 dark:filter" />
                     <span>Sign out</span>
                 </span>
             </button>
