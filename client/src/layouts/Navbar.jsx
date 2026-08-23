@@ -1,30 +1,45 @@
 import { useEffect, useState } from "react";
-import { FaHamburger, FaBars, FaXing, FaPlus, FaUser } from "react-icons/fa"
+import { FaHamburger, FaBars, FaXing, FaPlus, FaRegUser } from "react-icons/fa"
 import { Link, useNavigate } from 'react-router-dom'
 import { navLinks } from '@config/navigation'
 import { ThemeToggler } from '@components';
 import { Button, SearchResults } from '@components/ui'
 import { SearchBookmarks } from "@features/bookmark"
 
-const Navbar = () => {
+const Navbar = ({ variant }) => {
     return (
         <div className="shadow-header">
             {/* <div className="border-b border-neutral-200 dark:border-neutral-300"> */}
-            <MobileNavbar />
-            <DesktopNavbar />
+            <MobileNavbar variant={variant} />
+            <DesktopNavbar variant={variant} />
         </div>
     );
 };
 
-const MobileNavbar = () => {
+const MobileNavbar = ({ variant = "primary" }) => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className="flex justify-between px-4 py-2 xl:hidden">
             KnowMark
-            <button onClick={() => setOpen(!open)}>
-                <FaBars className="size-4 active:rotate-90" />
-            </button>
+            {
+                variant === "primary"
+                    ?
+                    <button
+                        onClick={
+                            setTimeout(() => {
+                                () => setOpen(!open)
+                            }, 1000)
+                        }
+                    >
+                        <FaBars className="size-4 active:rotate-90" />
+                    </button>
+                    :
+                    <button>
+                        <FaRegUser className="size-4" onClick={() => navigate("/signin")} />
+                    </button>
+            }
             {
                 open &&
                 <div className="fixed inset-0 z-50 h-full w-full bg-main px-4 py-2">
@@ -55,15 +70,24 @@ const MobileNavbar = () => {
     )
 }
 
-const DesktopNavbar = () => {
+const DesktopNavbar = ({ variant = "primary" }) => {
     const navigate = useNavigate();
 
     return (
         <div className="hidden py-1.5 mt-1 px-7 w-full gap-2 xl:block shadow-brand">
-            <div className="flex items-center justify-end gap-4 w-full">
-                <Button onClick={() => navigate("/create")} label="Add Bookmark" Icon={FaPlus} variant="tertiary" corners="full" />
-                <Link to={"/profile"} className="border rounded-full px-2 py-1"><FaUser className="h-5 lg:h-6" /></Link>
-            </div>
+            {
+                variant === "primary"
+                    ?
+                    <div className="flex items-center justify-end gap-4 w-full">
+                        <Button onClick={() => navigate("/create")} label="Add Bookmark" Icon={FaPlus} variant="tertiary" corners="full" />
+                        <Link to={"/profile"} className="border rounded-full px-2 py-1"><FaRegUser className="h-5 lg:h-6" /></Link>
+                    </div>
+                    :
+                    <div className="flex items-center justify-between gap-4 w-full">
+                        <p>KnowMark</p>
+                        <Button onClick={() => navigate("/signin")} label="Signin" variant="tertiary" corners="full" />
+                    </div>
+            }
         </div>
     )
 }
