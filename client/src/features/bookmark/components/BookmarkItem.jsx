@@ -30,13 +30,13 @@ const BookmarkItem = ({
 
 export default BookmarkItem;
 
-const BookmarkCard = ({ id, name, url, notes }) => {
+const BookmarkCard = ({ id, title, url, notes }) => {
     const notesHtml = markdownToHtml(notes?.toString() || "");
     return (
         <Link to={`/bookmark/${id}`} className="group my-3 w-full relative flex flex-col justify-between items-center rounded-2xl border border-card-border bg-card-background px-2 py-13 shadow-main transition-all duration-200 hover:-translate-y-1 hover:border-blue-500 hover:shadow-md mr-3">
             <div className="flex flex-col items-center">
                 <p className="text-xs font-semibold uppercase tracking-wider">bookmark</p>
-                <h2 className="mt-2 text-xl font-bold text-slate-800 line-clamp-2 group-hover:text-blue-600">{name}</h2>
+                <h2 className="mt-2 text-xl font-bold text-slate-800 line-clamp-2 group-hover:text-blue-600">{title}</h2>
             </div>
             <div className="mt-4 flex border-t border-slate-100 pt-3 w-full max-w-xs relative">
                 <p target="_blank" className="min-w-0 no-underline text-slate-500 mx-auto text-sm break-words font-medium">{url}</p>
@@ -57,7 +57,6 @@ const BookmarkCard = ({ id, name, url, notes }) => {
 }
 
 const FullBookmark = ({ id, title, url, notes, tags, category, date, time, user, isStarred, onStar, onDelete, onEdit }) => {
-    console.log("In fullbookmark usstared ", onDelete)
     const notesHtml = markdownToHtml(notes?.toString() || "");
     return (
         <article className="mx-auto max-w-3xl px-4 py-10">
