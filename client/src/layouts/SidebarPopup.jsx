@@ -12,7 +12,6 @@ const Popup = ({ hidePopup }) => {
     const queryClient = useQueryClient();
 
     const { data: currentUser, isError } = useCurrentUser();
-    // console.log("ID ", currentUser?._id)
     const handleSignOut = async () => {
         try {
             await AuthService.signout();
