@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 import { FaHamburger, FaBars, FaXing, FaPlus, FaRegUser } from "react-icons/fa"
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuthStatus } from "@hooks";
 import { navLinks } from '@config/navigation'
 import { ThemeToggler } from '@components';
 import { Button, SearchResults } from '@components/ui'
 import { SearchBookmarks } from "@features/bookmark"
 
 const Navbar = ({ variant }) => {
+    const { data: isAuthenticated } = useAuthStatus();
     return (
         <div className="shadow-header">
             {/* <div className="border-b border-neutral-200 dark:border-neutral-300"> */}
-            <MobileNavbar variant={variant} />
-            <DesktopNavbar variant={variant} />
+            <MobileNavbar variant={variant} authenticated={isAuthenticated} />
+            <DesktopNavbar variant={variant} authenticated={isAuthenticated} />
         </div>
     );
 };
 
-const MobileNavbar = ({ variant = "primary" }) => {
+const MobileNavbar = ({ variant = "primary", authenticated }) => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -37,7 +39,13 @@ const MobileNavbar = ({ variant = "primary" }) => {
                     </button>
                     :
                     <button>
-                        <FaRegUser className="size-4" onClick={() => navigate("/signin")} />
+                        {
+                            authenticated
+                                ?
+                                <FaRegUser className="size-4" onClick={() => navigate("/profile")} />
+                                :
+                                <FaRegUser className="size-4" onClick={() => navigate("/signin")} />
+                        }
                     </button>
             }
             {
@@ -70,9 +78,8 @@ const MobileNavbar = ({ variant = "primary" }) => {
     )
 }
 
-const DesktopNavbar = ({ variant = "primary" }) => {
+const DesktopNavbar = ({ variant = "primary", authenticated }) => {
     const navigate = useNavigate();
-
     return (
         <div className="hidden py-1.5 mt-1 px-7 w-full gap-2 xl:block shadow-brand">
             {
@@ -85,7 +92,15 @@ const DesktopNavbar = ({ variant = "primary" }) => {
                     :
                     <div className="flex items-center justify-between gap-4 w-full">
                         <p>KnowMark</p>
-                        <Button onClick={() => navigate("/signin")} label="Signin" variant="tertiary" corners="full" />
+                        <button className="cursor-pointer">
+                            {
+                                authenticated
+                                    ?
+                                    <FaRegUser className="size-4 bg-main fg-main" onClick={() => navigate("/profile")} />
+                                    :
+                                    <FaRegUser className="size-4 bg-main fg-main" onClick={() => navigate("/signin")} />
+                            }
+                        </button>
                     </div>
             }
         </div>
