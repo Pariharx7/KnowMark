@@ -85,7 +85,7 @@ const UpdatePasswordForm = ({ onSubmit }) => {
                         <Button
                             label="Update Password"
                             onClick={() => setShowSnackbar(true)}
-                            isDisabled={!isValid}
+                            // isDisabled={!isValid}
                             fullWidth
                         />
                     </div>
