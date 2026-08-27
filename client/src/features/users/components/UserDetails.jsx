@@ -12,14 +12,12 @@ const UserDetails = () => {
 
     const { data: currentUser } = useCurrentUser();
 
-    // console.log("UXR ", currentUser)
-
 
     return (
-        <section className="w-full max-w-screen p-3 grid gap-2 md:grid-cols-2 flex-1">
-            <div className="col-span-1 py-12 px-3 text-2xl w-full max-w-2xl mx-auto flex flex-col rounded-xl justify-center items-center gap-3 border border-neutral-200 bg-neutral-100 h-full">
-                <div className='bg-neutral-300 h-96 w-full rounded-2xl my-10 px-10 text-9xl text-yellow-100'>
-                    <HiUserCircle className="size-99" />
+        <section className="w-full lg:max-w-screen p-1 lg:p-3 grid gap-2 md:grid-cols-2 flex-1">
+            <div className="col-span-1 py-12 px-3 text-2xl w-full lg:max-w-2xl mx-auto flex flex-col rounded-xl justify-center items-center gap-3 border bg-card h-full">
+                <div className='bg-main fg-main h-96 w-full rounded-2xl my-10 px-10 text-9xl text-yellow-100 mx-auto'>
+                    <HiUserCircle className="size-99 mx-auto" />
                 </div>
 
                 <div className="-mt-9">Hey 👋 <span className="text-3xl">{currentUser?.name}</span></div>
@@ -37,9 +35,9 @@ const UserDetails = () => {
                     </Link>
                 </div>
             </div>
-            <div className="col-span-1 w-full bg-neutral-100 border-neutral-200 border h-full max-w-2xl rounded-xl mx-auto px-2 py-3 flex flex-col gap-2 text-slate-700">
+            <div className="col-span-1 w-full bg-main fg-card h-full max-w-2xl rounded-xl mx-auto px-2 py-3 flex flex-col gap-2 text-slate-700">
 
-                <div className='bg-neutral-100/20 h-64 md:h-full w-full rounded-2xl p-2 text-2xl py-4 flex flex-col items-center justify-evenly'>
+                <div className='bg-card border h-64 md:h-full w-full rounded-2xl p-2 text-2xl py-4 flex flex-col items-center justify-evenly'>
                     <p className="text-3xl font-semibold underline">Bookmarks Information: </p>
                     <div>
                         <p>Bookmarks: <Link to="/dashboard">{currentUser?.totalBookmarks}</Link></p>
@@ -47,8 +45,7 @@ const UserDetails = () => {
 
                     </div>
                 </div>
-                {/* <hr className="h-px" /> */}
-                <div className='bg-neutral-100/20 h-64 md:h-full w-full rounded-2xl p-2 text-2xl py-4 flex flex-col items-center justify-evenly'>
+                <div className='bg-card border h-64 md:h-full w-full rounded-2xl p-2 text-2xl py-4 flex flex-col items-center justify-evenly'>
                     <p className="text-3xl font-semibold underline">Account Information: </p>
                     <div>
                         <p>Sign up method: <span className="ml-2">{currentUser?.signInType}</span></p>
