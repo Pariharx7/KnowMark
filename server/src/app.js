@@ -63,11 +63,12 @@ app.use(passport.session());
 app.use(morganMiddleware);
 
 // api routes import
-import { healthCheckRouter } from "./api/common/routes/index.js";
+import { healthCheckRouter, featureRouter } from "./api/common/routes/index.js";
 import { errorHandler } from "./api/common/middlewares/index.js";
 
 // healthcheck
 app.use("/api/healthcheck", healthCheckRouter);
+app.use("/api/features", featureRouter);
 
 // api v1 routes
 import {
