@@ -1,9 +1,9 @@
-const Pagination = ({ currentPage, totalPages, setPage, refetch }) => {
+const Pagination = ({ currentPage, totalPages, setPage }) => {
     return (
         <div className="flex w-full justify-center items-center gap-2">
             <button
                 className="dark:border-dark-700 dark:active:bg-dark-600 flex size-8 items-center justify-center rounded-full border-gray-100 bg-transparent outline-none ring-primary/70 transition-all hover:border focus:ring-2 active:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-primary/70"
-                onClick={() => { setPage(1); refetch() }}
+                onClick={() => { setPage(1) }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ const Pagination = ({ currentPage, totalPages, setPage, refetch }) => {
 
             <button
                 className="dark:border-dark-700 dark:active:bg-dark-600 flex size-8 items-center justify-center rounded-full border-gray-100 bg-transparent outline-none ring-primary/70 transition-all hover:border focus:ring-2 active:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-primary/70"
-                onClick={() => { setPage(old => Math.max(1, old - 1)); refetch() }}
+                onClick={() => { setPage(old => Math.max(1, old - 1)) }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, setPage, refetch }) => {
 
             <button
                 className="dark:border-dark-700 dark:active:bg-dark-600 flex size-8 items-center justify-center rounded-full border-gray-100 bg-transparent outline-none ring-primary/70 transition-all hover:border focus:ring-2 active:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-primary/70"
-                onClick={() => { setPage(old => Math.min(old + 1, totalPages)); refetch() }}
+                onClick={() => { setPage(old => Math.min(old + 1, totalPages)) }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ const Pagination = ({ currentPage, totalPages, setPage, refetch }) => {
 
             <button
                 className="dark:border-dark-700 dark:active:bg-dark-600 flex size-8 items-center justify-center rounded-full border-gray-100 bg-transparent outline-none ring-primary/70 transition-all hover:border focus:ring-2 active:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-primary/70"
-                onClick={() => { setPage(totalPages); refetch() }}
+                onClick={() => { setPage(totalPages) }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
