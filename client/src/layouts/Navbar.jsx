@@ -11,7 +11,6 @@ const Navbar = ({ variant }) => {
     const { data: isAuthenticated } = useAuthStatus();
     return (
         <div className="shadow-header">
-            {/* <div className="border-b border-neutral-200 dark:border-neutral-300"> */}
             <MobileNavbar variant={variant} authenticated={isAuthenticated} />
             <DesktopNavbar variant={variant} authenticated={isAuthenticated} />
         </div>
@@ -30,9 +29,7 @@ const MobileNavbar = ({ variant = "primary", authenticated }) => {
                     ?
                     <button
                         onClick={
-                            setTimeout(() => {
-                                () => setOpen(!open)
-                            }, 1000)
+                            () => setOpen(!open)
                         }
                     >
                         <FaBars className="size-4 active:rotate-90" />
@@ -68,7 +65,7 @@ const MobileNavbar = ({ variant = "primary", authenticated }) => {
                                 <div key={index + item.title}
                                     className="px-2"
                                 >
-                                    <Link to={item.href} className="text-2xl font-medium text-neutral-600 dark:text-neutral-400">{item.title}</Link>
+                                    <Link to={item.href} className="text-2xl font-medium text-neutral-600 dark:text-neutral-400" onClick={() => setOpen(false)} >{item.title}</Link>
                                 </div>
                             ))}
                     </div>
