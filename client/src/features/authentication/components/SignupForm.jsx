@@ -90,6 +90,7 @@ const SignupForm = ({ onSubmit, buttonText }) => {
                     label={buttonText}
                     corners="md"
                     fullWidth
+                    type={'submit'}
                 />
             </div>
             {errors.message && (
