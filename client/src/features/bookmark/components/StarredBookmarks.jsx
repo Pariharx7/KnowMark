@@ -13,7 +13,7 @@ const StarredBookmarks = () => {
     const [pageView, setPageView] = useState("column");
 
 
-    const keyName = `'${BOOKMARK_QUERY_KEYS.getAllStarredBookmarks}', page`;
+    const keyName = `'${BOOKMARK_QUERY_KEYS.getAllStarredBookmarks}', ${page}`;
 
     const { data: {
         bookmarks,
