@@ -12,25 +12,19 @@ const Bookmarks = () => {
     const [page, setPage] = useState(1);
     const [pageView, setPageView] = useState("column");
 
-    const keyName = `'${BOOKMARK_QUERY_KEYS.getAllBookmarks}', {page}`;
+    const keyName = `'${BOOKMARK_QUERY_KEYS.getAllBookmarks}', ${page}`;
 
 
     const { data: {
         bookmarks,
         pagination
-    }, isPending, refetch } = useBookmarks(
+    } } = useBookmarks(
         keyName,
         BookmarkService.getAllBookmarks(page),
         page,
     );
 
-    if (isPending) {
-        return (
-            <div className="font-extrabold text-2xl text-black">
-                meri awaaz
-            </div>
-        )
-    }
+    console.log("BGMKDS ", bookmarks)
 
     return (
         <section className={`flex flex-col ${pageView === "column" ? "mx-auto" : "mx-10"}`} >
@@ -52,13 +46,13 @@ const Bookmarks = () => {
                 key={page}>
                 {
                     bookmarks?.map((bookmark, index) => (
-                        // <Suspense key={page + index} fallback={<div className="text-2xl">Changing pages</div>}>
-                        <BookmarkItem
-                            key={index}
-                            variant="card"
-                            data={bookmark}
-                        />
-                        // </Suspense>
+                        <Suspense key={page + index} fallback={<div className="text-2xl">Changing pages</div>}>
+                            <BookmarkItem
+                                key={index}
+                                variant="card"
+                                data={bookmark}
+                            />
+                        </Suspense>
                     ))
                 }
             </div>
@@ -68,7 +62,6 @@ const Bookmarks = () => {
                     currentPage={pagination.currentPage}
                     totalPages={pagination.lastPage}
                     setPage={setPage}
-                    refetch={refetch}
                 />
             </div>
         </section>
