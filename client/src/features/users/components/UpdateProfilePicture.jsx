@@ -14,8 +14,6 @@ const UpdateProfilePicture = ({ selectedImage, setSelectedImage, onUpload, isUpl
             <div className="mt-6">
                 <div className='bg-neutral-300 h-96 w-full rounded-2xl my-10 px-10 text-9xl text-yellow-100 flex items-center justify-center'>
                     {selectedImage ? (
-                        // preview
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={URL.createObjectURL(selectedImage)}
                             alt="avatar-preview"
@@ -25,7 +23,7 @@ const UpdateProfilePicture = ({ selectedImage, setSelectedImage, onUpload, isUpl
                         <HiUserCircle className="size-99 mx-auto" />
                     )}
                 </div>
-                <div className="flex items-center gap-3 md:justify-end w-full my-3">
+                <div className="flex items-center gap-3 justify-center md:justify-end w-full my-3">
                     {!selectedImage ? (
                         <label htmlFor="avatar" className='flex items-center gap-3 cursor-pointer text-sm text-blue-500'>
                             Upload Image
